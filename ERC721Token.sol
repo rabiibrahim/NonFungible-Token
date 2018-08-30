@@ -31,18 +31,17 @@ contract ERC721Token is SupportsInterfaceWithLookup, ERC721BasicToken, ERC721 {
   /**
    * @dev Constructor function
    */
-  constructor(string _name, string _symbol) public {
+  constructor(string _name, string _symbol)  public {
     name_ = _name;
     symbol_ = _symbol;
 
     // register the supported interfaces to conform to ERC721 via ERC165
     _registerInterface(InterfaceId_ERC721Enumerable);
     _registerInterface(InterfaceId_ERC721Metadata);
-
-    for (uint256 i; i < 12; i++) {
+    
+      for (uint256 i; i < 12; i++) {
       _mint(msg.sender, i);
     }
-
   }
 
   /**
@@ -127,7 +126,11 @@ contract ERC721Token is SupportsInterfaceWithLookup, ERC721BasicToken, ERC721 {
    //number 15
   function addTokenTo(address _to, uint256 _tokenId) internal {
     // YOUR CODE HERE
-
+    super.addTokenTo(_to, _tokenId);
+    
+    uint256 length = ownedTokens[_to].length;
+    ownedTokens[_to].push(_tokenId);
+    ownedTokensIndex[_tokenId] = length;
   }
 
   /**
@@ -165,7 +168,10 @@ contract ERC721Token is SupportsInterfaceWithLookup, ERC721BasicToken, ERC721 {
    // number 16
   function _mint(address _to, uint256 _tokenId) internal {
     // YOUR CODE HERE
-
+    super._mint(_to, _tokenId);
+    allTokensIndex[_tokenId] = allTokens.length;
+    allTokens.push(_tokenId);
+    
   }
 
   /**
@@ -193,6 +199,7 @@ contract ERC721Token is SupportsInterfaceWithLookup, ERC721BasicToken, ERC721 {
     allTokens.length--;
     allTokensIndex[_tokenId] = 0;
     allTokensIndex[lastToken] = tokenIndex;
+
   }
 
 }
